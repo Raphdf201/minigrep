@@ -11,6 +11,7 @@ repository = "https://github.com/Raphdf201/minigrep"
 keywords = ["cli", "grep", "search"]
 
 [dependencies]
+anyhow = "1.0"
 
 [profile.dev]
 opt-level = 0

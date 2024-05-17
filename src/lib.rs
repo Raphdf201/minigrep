@@ -1,16 +1,10 @@
-//! # minigrep lib
-//!
-//! A library for my minigrep project
-
 use std::env;
-use std::error::Error;
 use std::fmt::Result;
 use std::fs;
 
-/// Runs the search engine,
-/// reads the file specified in the filename argument and
-/// outputs the lines of the file that contain the query
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
+use anyhow::Error;
+
+pub fn run(config: Config) -> Result {
     let contents = fs::read_to_string(config.filename)?;
 
     let results = if config.case_sensitive {
@@ -26,7 +20,6 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-/// Contains the fields for the search engine/arguments
 pub struct Config {
     pub query: String,
     pub filename: String,
@@ -34,24 +27,19 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &str> {
+    pub fn new(args: &[String]) -> Result<Config, Error> {
         if args.len() < 3 {
-            return Err("Not enough arguments");
+            return Err(Error::msg("Not enough arguments"));
         }
         let query: String = args[1].clone();
         let filename: String = args[2].clone();
 
         let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
 
-        Ok(Config {
-            query,
-            filename,
-            case_sensitive,
-        })
+        Ok(())
     }
 }
 
-/// Searches the query in a file
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
 
