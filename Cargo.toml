@@ -15,5 +15,5 @@ keywords = ["cli", "grep", "search"]
 [profile.dev]
 opt-level = 0
 
-[provile.release]
+[profile.release]
 opt-level = 3
