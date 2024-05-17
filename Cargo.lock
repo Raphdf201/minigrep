@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "minigrep"
+name = "searcher_txt"
 version = "1.0.0"
