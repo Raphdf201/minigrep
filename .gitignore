@@ -2,3 +2,5 @@ src/main.exe
 src/main.pdb
 
 /target
+
+.idea

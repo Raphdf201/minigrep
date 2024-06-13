@@ -2,9 +2,7 @@ use std::env;
 use std::fmt::Result;
 use std::fs;
 
-use anyhow::Error;
-
-pub fn run(config: Config) -> Result {
+pub fn run(config: ()) -> Result {
     let contents = fs::read_to_string(config.filename)?;
 
     let results = if config.case_sensitive {
@@ -27,9 +25,9 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(args: &[String]) -> Result<Config, Error> {
+    pub fn new(args: &[String]) -> Result {
         if args.len() < 3 {
-            return Err(Error::msg("Not enough arguments"));
+            return Err(core::fmt::Error::msg("Not enough arguments"));
         }
         let query: String = args[1].clone();
         let filename: String = args[2].clone();
