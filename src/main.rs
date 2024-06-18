@@ -7,7 +7,8 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     let config = Config::new(&args).unwrap_or_else(|err| {
-        println!("Problem parsing arguments : {}", err);
+        println!("An error ocurred");
+        eprintln!("Problem parsing arguments : {}", err);
         process::exit(1);
     });
 
@@ -16,7 +17,8 @@ fn main() {
     println!("Lines that contain \"{}\" :", config.query);
 
     if let Err(e) = searcher_txt::run(config) {
-        println!("Application error : {}", e);
+        println!("An error ocurred");
+        eprintln!("Application error : {}", e);
         process::exit(1);
     }
 }
