@@ -12,8 +12,8 @@ keywords = ["cli", "grep", "search"]
 
 [dependencies]
 
-[profile.dev]
-opt-level = 0
+[profile.test]
+opt-level = 1
 
-[profile.release]
-opt-level = 3
+[profile.bench]
+opt-level = 2
