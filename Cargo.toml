@@ -1,6 +1,6 @@
 [package]
 name = "searcher_txt"
-version = "1.1.0"
+version = "1.2.0"
 authors = ["Raphdf201 <deschenesr545@gmail.com>"]
 edition = "2021"
 license-file = "unlicense.txt"
