@@ -2,6 +2,7 @@ src/main.exe
 src/main.pdb
 
 /target
+/build
 
 .idea
 
