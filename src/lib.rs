@@ -1,10 +1,10 @@
 use std::error::Error;
-use std::{env, fs};
+use std::fs;
 
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.filename)?;
 
-    let results = if config.case_sensitivity {
+    let results = if config.case_sensitivity == "true" {
         search(&config.query, &contents)
     } else {
         search_case_insensitive(&config.query, &contents)
@@ -20,19 +20,23 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 pub struct Config {
     pub query: String,
     pub filename: String,
-    pub case_sensitivity: bool,
+    pub case_sensitivity: String,
 }
 
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &str> {
         if args.len() < 3 {
-            return Err("Not enough arguments");
+            return Err("Missing arguments");
         }
         let query = args[1].clone();
         let filename = args[2].clone();
-        let case_sensitivity = env::var("CASE_INSENSITIVE").is_err();
+        let case_sensitivity = args[3].clone();
 
-        Ok(Config { query, filename, case_sensitivity })
+        Ok(Config {
+            query,
+            filename,
+            case_sensitivity,
+        })
     }
 }
 
@@ -86,6 +90,9 @@ safe, fast, productive.
 Pick three.
 Trust me.";
 
-        assert_eq!(vec!["Rust:", "Trust me."], search_case_insensitive(query, contents));
+        assert_eq!(
+            vec!["Rust:", "Trust me."],
+            search_case_insensitive(query, contents)
+        );
     }
 }
