@@ -6,7 +6,7 @@ i made this to train my rust skills
 
 ## Usage
 
-This is a cli program, wich means you need to execute it using .\searcher_txt.exe on windows and ./searcher_txt on linux<br/>
+This is a cli program, wich means you need to execute it using `.\searcher_txt.exe` on windows and `./searcher_txt` on linux and MacOS<br/>
 The arguments needed are the query, filename and case sensitivity
 Example for searching "potato" in file.txt with no case sensitivity on windows :
 
