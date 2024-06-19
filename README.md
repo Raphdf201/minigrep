@@ -1,5 +1,7 @@
 # A little copy of grep
 
+![Rust build](https://github.com/Raphdf201/minigrep/actions/workflows/rust.yml/badge.svg)
+
 i made this to train my rust skills
 
 ## Usage
