@@ -4,7 +4,7 @@ use std::fs;
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.filename)?;
 
-    let results = if config.case_sensitivity == "true" {
+    let results = if config.case_sensitivity {
         search(&config.query, &contents)
     } else {
         search_case_insensitive(&config.query, &contents)
@@ -20,17 +20,20 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 pub struct Config {
     pub query: String,
     pub filename: String,
-    pub case_sensitivity: String,
+    pub case_sensitivity: bool,
 }
 
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &str> {
         if args.len() < 3 {
-            return Err("Missing arguments");
+            return Err("Missing 2 arguments");
+        } else if args.len() < 4 {
+            return Err("Missing 1 argument");
         }
+
         let query = args[1].clone();
         let filename = args[2].clone();
-        let case_sensitivity = args[3].clone();
+        let case_sensitivity = string_to_bool(args[3].clone());
 
         Ok(Config {
             query,
@@ -63,6 +66,20 @@ pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a st
     }
 
     results
+}
+
+pub fn string_to_bool(string: String) -> bool {
+    let mut is_bool = false;
+    if string == "true" {
+        is_bool = true;
+    } else if string == "false" {
+        is_bool = false;
+    } else {
+        println!("An error ocurred");
+        eprintln!("Internal error : bad usage of searcher_txt::string_to_bool");
+    }
+
+    is_bool
 }
 
 #[cfg(test)]

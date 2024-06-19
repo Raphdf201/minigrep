@@ -2,7 +2,27 @@
 
 i made this to train my rust skills
 
+## Usage
+
+This is a cli program, wich means you need to execute it using .\searcher_txt.exe on windows and ./searcher_txt on linux<br/>
+The arguments needed are the query, filename and case sensitivity
+Example for searching "potato" in file.txt with no case sensitivity on windows :
+
+```
+.\searcher_txt potato file.txt false
+```
+
+If you want your search to be case sensitive :
+
+```
+.\searcher_txt potato file.txt true
+```
+
+If you're on linux or MacOS, replace the \ by /
+
 ## Changelog
+
+1.2.3 : Small optimizations
 
 1.2.2 : Case sensitivity is now an argument
 
