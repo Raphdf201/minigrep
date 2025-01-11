@@ -24,6 +24,8 @@ If you're on linux or MacOS, replace the \ by /
 
 ## Changelog
 
+1.2.4 : Documentation
+
 1.2.3 : Small optimizations
 
 1.2.2 : Case sensitivity is now an argument

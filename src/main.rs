@@ -3,6 +3,7 @@ use std::process;
 
 use searcher_txt::Config;
 
+/// Main function called when the app is ran
 fn main() {
     let args: Vec<String> = env::args().collect();
 

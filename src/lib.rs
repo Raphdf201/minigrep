@@ -1,6 +1,7 @@
 use std::error::Error;
 use std::fs;
 
+/// Runs a search with the provided config
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.filename)?;
 
@@ -17,12 +18,17 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+/// Parameters of the application
+/// query : the string to search
+/// filename : the file to search in
+/// case_sensitivity : tells if the search needs to be case-sensitive
 pub struct Config {
     pub query: String,
     pub filename: String,
     pub case_sensitivity: bool,
 }
 
+/// Implementation of the Config struct
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &str> {
         if args.len() < 3 {
@@ -43,6 +49,7 @@ impl Config {
     }
 }
 
+/// case-sensitive search
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
 
@@ -55,6 +62,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     results
 }
 
+/// case-insensitive search
 pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let query = query.to_lowercase();
     let mut results = Vec::new();
@@ -68,6 +76,7 @@ pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a st
     results
 }
 
+/// Serializes a string into a boolean
 pub fn string_to_bool(string: String) -> bool {
     let mut is_bool = false;
     if string == "true" {
