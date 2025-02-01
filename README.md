@@ -2,11 +2,10 @@
 
 ![Rust build](https://github.com/Raphdf201/minigrep/actions/workflows/rust.yml/badge.svg)
 
-i made this to train my rust skills
-
 ## Usage
 
-This is a cli program, wich means you need to execute it using `.\searcher_txt.exe` on windows and `./searcher_txt` on linux and MacOS<br/>
+This is a cli program, which means you need to execute it using `.\searcher_txt.exe` on windows and `./searcher_txt` on
+linux and macOS<br/>
 The arguments needed are the query, filename and case sensitivity
 Example for searching "potato" in file.txt with no case sensitivity on windows :
 
@@ -14,13 +13,13 @@ Example for searching "potato" in file.txt with no case sensitivity on windows :
 .\searcher_txt potato file.txt
 ```
 
-If you want your search to be case sensitive :
+If you want your search to be case-sensitive :
 
 ```
 .\searcher_txt potato file.txt --case
 ```
 
-If you're on linux or MacOS, replace the \ by /
+If you're on linux or macOS, replace the \ by /
 
 ## Changelog
 
