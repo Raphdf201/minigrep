@@ -13,8 +13,13 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
         search_case_insensitive(&config.query, &contents)
     };
 
-    for line in results {
-        println!("{}", line);
+    if results.is_empty() {
+        println!("Found no line containing {}", config.query);
+    } else {
+        println!("Lines that contain \"{}\":", config.query);
+        for line in results {
+            println!("{}", line);
+        }
     }
 
     Ok(())

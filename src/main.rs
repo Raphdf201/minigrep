@@ -8,9 +8,8 @@ use searcher_txt::Config;
 fn main() {
     let config = Config::parse();
 
-    println!("Searching for \"{}\"", config.query);
-    println!("In file \"{}\"", config.filename);
-    println!("Lines that contain \"{}\":", config.query);
+    print!("Searching for \"{}\"", config.query);
+    println!(" in \"{}\"", config.filename);
 
     if let Err(e) = searcher_txt::run(config) {
         eprintln!("Application error: {}", e);
