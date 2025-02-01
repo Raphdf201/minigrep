@@ -5,26 +5,23 @@ use std::fs;
 
 /// Runs a search with the provided config
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let results: Vec<&str>;
     let contents = fs::read_to_string(&config.filename)?;
-    if config.verbose {
+    let results: Vec<&str> = if config.verbose {
         println!("Parsing file contents");
 
         println!("Checking case sensitivity");
-        results = if config.case {
+        if config.case {
             println!("Running case sensitive search");
             search(&config.query, &contents)
         } else {
             println!("Running case insensitive search");
             search_case_insensitive(&config.query, &contents)
-        };
+        }
+    } else if config.case {
+        search(&config.query, &contents)
     } else {
-        results = if config.case {
-            search(&config.query, &contents)
-        } else {
-            search_case_insensitive(&config.query, &contents)
-        };
-    }
+        search_case_insensitive(&config.query, &contents)
+    };
     if results.is_empty() {
         println!("Found no line containing {}", config.query);
     } else {
