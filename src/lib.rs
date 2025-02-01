@@ -5,14 +5,26 @@ use std::fs;
 
 /// Runs a search with the provided config
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    let results: Vec<&str>;
     let contents = fs::read_to_string(&config.filename)?;
+    if config.verbose {
+        println!("Parsing file contents");
 
-    let results = if config.case {
-        search(&config.query, &contents)
+        println!("Checking case sensitivity");
+        results = if config.case {
+            println!("Running case sensitive search");
+            search(&config.query, &contents)
+        } else {
+            println!("Running case insensitive search");
+            search_case_insensitive(&config.query, &contents)
+        };
     } else {
-        search_case_insensitive(&config.query, &contents)
-    };
-
+        results = if config.case {
+            search(&config.query, &contents)
+        } else {
+            search_case_insensitive(&config.query, &contents)
+        };
+    }
     if results.is_empty() {
         println!("Found no line containing {}", config.query);
     } else {
@@ -21,7 +33,6 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
             println!("{}", line);
         }
     }
-
     Ok(())
 }
 
@@ -36,12 +47,17 @@ pub struct Config {
     /// Case sensitivity (optional)
     #[arg(short, long)]
     pub case: bool,
+    /// Verbose logging (optional)
+    #[arg(short, long)]
+    pub verbose: bool,
 }
 
 /// Implementation of the Config struct
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &str> {
-        if args.len() < 3 {
+        if args.len() < 4 {
+            return Err("Missing 3 arguments");
+        } else if args.len() < 3 {
             return Err("Missing 2 arguments");
         } else if args.len() < 4 {
             return Err("Missing 1 argument");
@@ -50,11 +66,13 @@ impl Config {
         let query = args[1].clone();
         let filename = args[2].clone();
         let case = string_to_bool(args[3].clone());
+        let verbose = string_to_bool(args[4].clone());
 
         Ok(Config {
             query,
             filename,
             case,
+            verbose,
         })
     }
 }
@@ -94,8 +112,7 @@ pub fn string_to_bool(string: String) -> bool {
     } else if string == "false" {
         is_bool = false;
     } else {
-        println!("An error ocurred");
-        eprintln!("Internal error : bad usage of searcher_txt::string_to_bool");
+        eprintln!("An error occurred during a string_to_bool operation");
     }
 
     is_bool
