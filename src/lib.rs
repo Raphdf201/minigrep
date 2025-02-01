@@ -7,7 +7,7 @@ use std::fs;
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(&config.filename)?;
 
-    let results = if config.case_sensitivity {
+    let results = if config.case {
         search(&config.query, &contents)
     } else {
         search_case_insensitive(&config.query, &contents)
@@ -30,7 +30,7 @@ pub struct Config {
     pub filename: String,
     /// Case sensitivity (optional)
     #[arg(short, long)]
-    pub case_sensitivity: bool,
+    pub case: bool,
 }
 
 /// Implementation of the Config struct
@@ -44,12 +44,12 @@ impl Config {
 
         let query = args[1].clone();
         let filename = args[2].clone();
-        let case_sensitivity = string_to_bool(args[3].clone());
+        let case = string_to_bool(args[3].clone());
 
         Ok(Config {
             query,
             filename,
-            case_sensitivity,
+            case,
         })
     }
 }
