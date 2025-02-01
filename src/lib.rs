@@ -1,9 +1,11 @@
+use clap::Parser;
+
 use std::error::Error;
 use std::fs;
 
 /// Runs a search with the provided config
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let contents = fs::read_to_string(config.filename)?;
+    let contents = fs::read_to_string(&config.filename)?;
 
     let results = if config.case_sensitivity {
         search(&config.query, &contents)
@@ -19,12 +21,15 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 }
 
 /// Parameters of the application
-/// query : the string to search
-/// filename : the file to search in
-/// case_sensitivity : tells if the search needs to be case-sensitive
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
 pub struct Config {
+    /// The string to search
     pub query: String,
+    /// The file to search in
     pub filename: String,
+    /// Case sensitivity (optional)
+    #[arg(short, long)]
     pub case_sensitivity: bool,
 }
 
