@@ -1,5 +1,5 @@
-src/main.exe
-src/main.pdb
+*.exe
+*.pdb
 
 /target
 /build
