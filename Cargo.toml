@@ -12,9 +12,3 @@ keywords = ["cli", "grep", "search"]
 
 [dependencies]
 clap = { version = "4.5.27", features = ["derive"] }
-
-[profile.test]
-opt-level = 1
-
-[profile.bench]
-opt-level = 2
