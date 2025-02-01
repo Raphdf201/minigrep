@@ -11,20 +11,20 @@ The arguments needed are the query, filename and case sensitivity
 Example for searching "potato" in file.txt with no case sensitivity on windows :
 
 ```
-.\searcher_txt potato file.txt false
+.\searcher_txt potato file.txt
 ```
 
 If you want your search to be case sensitive :
 
 ```
-.\searcher_txt potato file.txt true
+.\searcher_txt potato file.txt --case
 ```
 
 If you're on linux or MacOS, replace the \ by /
 
 ## Changelog
 
-1.2.4 : Documentation
+1.2.4 : New argument usage
 
 1.2.3 : Small optimizations
 
