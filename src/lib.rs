@@ -52,14 +52,6 @@ pub struct Config {
 /// Implementation of the Config struct
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &str> {
-        if args.len() < 4 {
-            return Err("Missing 3 arguments");
-        } else if args.len() < 3 {
-            return Err("Missing 2 arguments");
-        } else if args.len() < 4 {
-            return Err("Missing 1 argument");
-        }
-
         let query = args[1].clone();
         let filename = args[2].clone();
         let case = string_to_bool(args[3].clone());
