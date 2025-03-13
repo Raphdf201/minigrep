@@ -1,6 +1,12 @@
 # A little copy of grep
 
 ![Rust build](https://github.com/Raphdf201/minigrep/actions/workflows/rust.yml/badge.svg)
+![Crates.io Version](https://img.shields.io/crates/v/searcher_txt)
+![docs.rs](https://img.shields.io/docsrs/searcher_txt)
+![Crates.io Size](https://img.shields.io/crates/size/searcher_txt)
+![Crates.io Downloads (recent)](https://img.shields.io/crates/dr/searcher_txt)
+![Crates.io Total Downloads](https://img.shields.io/crates/d/searcher_txt)
+![Crates.io Downloads (latest version)](https://img.shields.io/crates/dv/searcher_txt)
 
 ## Usage
 
