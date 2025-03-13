@@ -5,10 +5,14 @@ use std::fs;
 
 /// Runs a search with the provided config
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    if config.verbose {
+        println!("Parsing file {}", config.filename)
+    }
     let contents = fs::read_to_string(&config.filename)?;
+    if config.whole { 
+        println!("Contents of search :\n{}", contents)
+    }
     let results: Vec<&str> = if config.verbose {
-        println!("Parsing file contents");
-
         println!("Checking case sensitivity");
         if config.case {
             println!("Running case sensitive search");
@@ -47,6 +51,9 @@ pub struct Config {
     /// Verbose logging (optional)
     #[arg(short, long)]
     pub verbose: bool,
+    /// Print whole file (optional)
+    #[arg(short, long)]
+    pub whole: bool,
 }
 
 /// Implementation of the Config struct
@@ -56,12 +63,14 @@ impl Config {
         let filename = args[2].clone();
         let case = string_to_bool(args[3].clone());
         let verbose = string_to_bool(args[4].clone());
+        let whole = string_to_bool(args[5].clone());
 
         Ok(Config {
             query,
             filename,
             case,
             verbose,
+            whole,
         })
     }
 }
@@ -77,6 +86,10 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     }
 
     results
+}
+
+pub fn get_whole_file() {
+    
 }
 
 /// case-insensitive search

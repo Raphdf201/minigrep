@@ -28,6 +28,8 @@ If you're on linux or macOS, replace the \ by /
 
 ## Changelog
 
+1.2.6 : Print whole file function
+
 1.2.5 : Verbose argument
 
 1.2.4 : New argument usage
