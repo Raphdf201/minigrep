@@ -15,10 +15,10 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let results: Vec<&str> = if config.verbose {
         println!("Checking case sensitivity");
         if config.case {
-            println!("Running case sensitive search");
+            println!("Running case-sensitive search");
             search(&config.query, &contents)
         } else {
-            println!("Running case insensitive search");
+            println!("Running case-insensitive search");
             search_case_insensitive(&config.query, &contents)
         }
     } else if config.case {

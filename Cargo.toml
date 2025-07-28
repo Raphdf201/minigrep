@@ -2,7 +2,7 @@
 name = "searcher_txt"
 version = "1.2.7"
 authors = ["Raphdf201 <raphdf201@hotmail.com>"]
-edition = "2021"
+edition = "2024"
 license-file = "unlicense.txt"
 description = "A copy of grep that i made to show that im bad at rust"
 readme = "README.md"
