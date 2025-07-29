@@ -1,45 +1,14 @@
-use clap::Parser;
-
 use std::error::Error;
 use std::fs;
+use std::path::Path;
 
-/// Runs a search with the provided config
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    if config.verbose {
-        println!("Parsing file {}", config.filename)
-    }
-    let contents = fs::read_to_string(&config.filename)?;
-    if config.whole { 
-        println!("Contents of search :\n{}", contents)
-    }
-    let results: Vec<&str> = if config.verbose {
-        println!("Checking case sensitivity");
-        if config.case {
-            println!("Running case-sensitive search");
-            search(&config.query, &contents)
-        } else {
-            println!("Running case-insensitive search");
-            search_case_insensitive(&config.query, &contents)
-        }
-    } else if config.case {
-        search(&config.query, &contents)
-    } else {
-        search_case_insensitive(&config.query, &contents)
-    };
-    if results.is_empty() {
-        println!("Found no line containing {}", config.query);
-    } else {
-        println!("Lines that contain \"{}\":", config.query);
-        for line in results {
-            println!("{}", line);
-        }
-    }
-    Ok(())
-}
+use clap::Parser;
 
-/// Parameters of the application
+use walkdir::WalkDir;
+
+/// Parameters (arguments) of the cli program
 #[derive(Parser, Debug)]
-#[command(version, about, long_about = None)]
+#[command(version, about = None, long_about = None)]
 pub struct Config {
     /// The string to search
     pub query: String,
@@ -54,6 +23,9 @@ pub struct Config {
     /// Print whole file (optional)
     #[arg(short, long)]
     pub whole: bool,
+    /// Search a folder recursively (optional)
+    #[arg(short, long)]
+    pub recurse: bool,
 }
 
 /// Implementation of the Config struct
@@ -64,6 +36,7 @@ impl Config {
         let case = string_to_bool(args[3].clone());
         let verbose = string_to_bool(args[4].clone());
         let whole = string_to_bool(args[5].clone());
+        let recurse = string_to_bool(args[6].clone());
 
         Ok(Config {
             query,
@@ -71,12 +44,14 @@ impl Config {
             case,
             verbose,
             whole,
+            recurse,
         })
     }
 }
 
-/// case-sensitive search
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+/// Case-sensitive search
+/// Returns all the lines of the contents where the query is present
+pub fn search_case_sensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
 
     for line in contents.lines() {
@@ -88,11 +63,8 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     results
 }
 
-pub fn get_whole_file() {
-    
-}
-
-/// case-insensitive search
+/// Case-insensitive search
+/// Returns all the lines of the contents where the query is present
 pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let query = query.to_lowercase();
     let mut results = Vec::new();
@@ -104,6 +76,51 @@ pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a st
     }
 
     results
+}
+
+/// Recursive search
+/// Returns all the lines of all the files and folders mentioned in the config where the query is present
+pub fn search_recursive(config: &Config) -> Result<(), Box<dyn Error>> {
+    let path = Path::new(&config.filename);
+    if !path.is_dir() {
+        eprintln!("Error: --recurse flag set but path is not a directory");
+        return Err("Invalid directory".into());
+    }
+
+    for entry in WalkDir::new(&config.filename)
+        .into_iter()
+        .filter_map(Result::ok)
+        .filter(|e| e.file_type().is_file())
+    {
+        let file_path = entry.path();
+        if config.verbose {
+            println!("Searching in file: {}", file_path.display());
+        }
+
+        let contents = fs::read_to_string(file_path);
+        if config.whole {
+            println!("Contents of search :\n{:?}\n", contents);
+        }
+
+        if let Ok(contents) = contents {
+            let results = if config.case {
+                search_case_sensitive(&config.query, &contents)
+            } else {
+                search_case_insensitive(&config.query, &contents)
+            };
+
+            if !results.is_empty() {
+                println!("\nIn file {}:", file_path.display());
+                for line in results {
+                    println!("{}", line);
+                }
+            }
+        } else if config.verbose {
+            eprintln!("Failed to read file: {}", file_path.display());
+        }
+    }
+
+    Ok(())
 }
 
 /// Serializes a string into a boolean
@@ -122,7 +139,7 @@ pub fn string_to_bool(string: String) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use super::{search, search_case_insensitive};
+    use super::{search_case_sensitive, search_case_insensitive};
 
     #[test]
     fn case_sensitive() {
@@ -133,11 +150,26 @@ safe, fast, productive.
 Pick three.
 Duct tape.";
 
-        assert_eq!(vec!["safe, fast, productive."], search(query, contents));
+        assert_eq!(vec!["safe, fast, productive."], search_case_sensitive(query, contents));
     }
 
     #[test]
     fn case_insensitive() {
+        let query = "rUsT";
+        let contents = "\
+Rust:
+safe, fast, productive.
+Pick three.
+Trust me.";
+
+        assert_eq!(
+            vec!["Rust:", "Trust me."],
+            search_case_insensitive(query, contents)
+        );
+    }
+
+    #[test]
+    fn whole_file() {
         let query = "rUsT";
         let contents = "\
 Rust:

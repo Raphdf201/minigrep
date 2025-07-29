@@ -26,13 +26,29 @@ If you want your search to be case-sensitive :
 .\searcher_txt potato file.txt --case
 ```
 
+If you want to search recursively, print the whole file, be case-sensitive and verbose, 
+
+```
+.\searcher_txt potato folder/ -cvwr
+```
+
 Available arguments :
 `--case/-c`
 `--verbose/-v`
+`--whole/-w`
+`--recurse/-r`
+`--help/-h`
+`--version/-V`
 
 If you're on linux or macOS, replace the \ by /
 
+[Info](https://docs.raphdf201.net/minigrep/)
+
 ## Changelog
+
+1.2.8 : Add recursive argument
+
+1.2.7 : Update dependencies
 
 1.2.6 : Print whole file function
 

@@ -4,7 +4,7 @@ version = "1.2.8"
 authors = ["Raphdf201 <raphdf201@hotmail.com>"]
 edition = "2024"
 license-file = "unlicense.txt"
-description = "A copy of grep that i made to show that im bad at rust"
+description = "A copy of grep that I made to show that im bad at rust"
 readme = "README.md"
 homepage = "https://github.com/Raphdf201/minigrep/releases"
 repository = "https://github.com/Raphdf201/minigrep"
@@ -12,3 +12,4 @@ keywords = ["cli", "grep", "search"]
 
 [dependencies]
 clap = { version = "4.5.41", features = ["derive"] }
+walkdir = "2.5.0"
