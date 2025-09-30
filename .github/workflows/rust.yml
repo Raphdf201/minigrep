@@ -1,5 +1,7 @@
 name: Rust builds
 
+permissions:
+  contents: read
 on: push
 
 env:
