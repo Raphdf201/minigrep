@@ -7,7 +7,7 @@ use clap::Parser;
 use walkdir::WalkDir;
 
 /// Parameters (arguments) of the cli program
-#[derive(Parser, Debug)]
+#[derive(Parser, Debug, PartialEq)]
 #[command(version, about = None, long_about = None)]
 pub struct Config {
     /// The string to search
@@ -124,7 +124,7 @@ pub fn search_recursive(config: &Config) -> Result<(), Box<dyn Error>> {
 }
 
 /// Serializes a string into a boolean
-pub fn string_to_bool(string: String) -> bool {
+fn string_to_bool(string: String) -> bool {
     let mut is_bool = false;
     if string == "true" {
         is_bool = true;
@@ -139,7 +139,7 @@ pub fn string_to_bool(string: String) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use super::{search_case_sensitive, search_case_insensitive};
+    use super::{search_case_insensitive, search_case_sensitive, string_to_bool, Config};
 
     #[test]
     fn case_sensitive() {
@@ -150,7 +150,10 @@ safe, fast, productive.
 Pick three.
 Duct tape.";
 
-        assert_eq!(vec!["safe, fast, productive."], search_case_sensitive(query, contents));
+        assert_eq!(
+            vec!["safe, fast, productive."],
+            search_case_sensitive(query, contents)
+        );
     }
 
     #[test]
@@ -181,5 +184,45 @@ Trust me.";
             vec!["Rust:", "Trust me."],
             search_case_insensitive(query, contents)
         );
+    }
+
+    #[test]
+    fn str_bool() {
+        let tr = "true".to_string();
+        let fa = "false".to_string();
+
+        assert_eq!(string_to_bool(tr), true);
+        assert_eq!(string_to_bool(fa), false);
+        assert_eq!(string_to_bool("notABoolean".to_string()), false)
+    }
+
+    #[test]
+    fn conf() {
+        let query = String::from("q");
+        let filename = String::from("f");
+        let case = string_to_bool("true".to_string());
+        let verbose = string_to_bool("false".to_string());
+        let whole = string_to_bool("true".to_string());
+        let recurse = string_to_bool("false".to_string());
+
+        assert_eq!(
+            Config::new(&[
+                String::new(),
+                String::from("q"),
+                String::from("f"),
+                String::from("true"),
+                String::from("false"),
+                String::from("true"),
+                String::from("maybe")]
+            ),
+            Ok(Config {
+                query,
+                filename,
+                case,
+                verbose,
+                whole,
+                recurse,
+            })
+        )
     }
 }

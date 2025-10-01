@@ -67,3 +67,15 @@ If you're on linux or macOS, replace the \ by /
 1.1.0 : Fixed some errors
 
 1.0.0 : Basic code (with errors)
+
+## Testing
+
+`cargo test`
+
+## Code coverage
+```
+cargo install cargo-llvm-cov
+cargo llvm-cov --open
+```
+
+
