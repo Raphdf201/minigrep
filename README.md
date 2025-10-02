@@ -47,6 +47,8 @@ If you're on linux or macOS, replace the \ by /
 
 ## Changelog
 
+1.2.8 : Refractor internal code and add more tests
+
 1.2.8 : Add recursive argument
 
 1.2.7 : Update dependencies
