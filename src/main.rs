@@ -5,7 +5,6 @@ use std::{fs, process};
 
 use searcher_txt::*;
 
-/// Main function called when the app is run through the CLI
 fn main() {
     let now = SystemTime::now();
     let config = Config::parse();

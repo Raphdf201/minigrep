@@ -123,11 +123,15 @@ pub fn search_recursive(config: &Config) -> Result<Vec<String>, String> {
 }
 
 /// Serializes a string into a boolean
+/// Case insensitive
+/// If the input string is not a boolean, eprintln!("An error occurred during a string_to_bool operation")
+/// Default return value : false
 fn string_to_bool(string: String) -> bool {
+    let str = string.to_lowercase();
     let mut is_bool = false;
-    if string == "true" {
+    if str == "true" {
         is_bool = true;
-    } else if string == "false" {
+    } else if str == "false" {
         is_bool = false;
     } else {
         eprintln!("{}", STR_TO_BOOL_ERR);
