@@ -1,9 +1,12 @@
-use std::error::Error;
+mod constants;
+mod tests;
+
 use std::fs;
 use std::path::Path;
 
 use clap::Parser;
 
+use crate::constants::*;
 use walkdir::WalkDir;
 
 /// Parameters (arguments) of the cli program
@@ -51,41 +54,42 @@ impl Config {
 
 /// Case-sensitive search
 /// Returns all the lines of the contents where the query is present
-pub fn search_case_sensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search_case_sensitive(query: &str, contents: &str) -> Result<Vec<String>, String> {
     let mut results = Vec::new();
 
     for line in contents.lines() {
         if line.contains(query) {
-            results.push(line);
+            results.push(line.to_string());
         }
     }
 
-    results
+    Ok(results)
 }
 
 /// Case-insensitive search
 /// Returns all the lines of the contents where the query is present
-pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search_case_insensitive(query: &str, contents: &str) -> Result<Vec<String>, String> {
     let query = query.to_lowercase();
     let mut results = Vec::new();
 
     for line in contents.lines() {
         if line.to_lowercase().contains(&query) {
-            results.push(line);
+            results.push(line.to_string());
         }
     }
 
-    results
+    Ok(results)
 }
 
 /// Recursive search
 /// Returns all the lines of all the files and folders mentioned in the config where the query is present
-pub fn search_recursive(config: &Config) -> Result<(), Box<dyn Error>> {
+pub fn search_recursive(config: &Config) -> Result<Vec<String>, String> {
     let path = Path::new(&config.filename);
     if !path.is_dir() {
-        eprintln!("Error: --recurse flag set but path is not a directory");
-        return Err("Invalid directory".into());
+        return Err(String::from(RECURSE_NOT_DIR));
     }
+
+    let mut all_results = Vec::new();
 
     for entry in WalkDir::new(&config.filename)
         .into_iter()
@@ -93,34 +97,29 @@ pub fn search_recursive(config: &Config) -> Result<(), Box<dyn Error>> {
         .filter(|e| e.file_type().is_file())
     {
         let file_path = entry.path();
-        if config.verbose {
-            println!("Searching in file: {}", file_path.display());
-        }
+        match fs::read_to_string(file_path) {
+            Ok(contents) => {
+                let results = if config.case {
+                    search_case_sensitive(&config.query, &contents)?
+                } else {
+                    search_case_insensitive(&config.query, &contents)?
+                };
 
-        let contents = fs::read_to_string(file_path);
-        if config.whole {
-            println!("Contents of search :\n{:?}\n", contents);
-        }
-
-        if let Ok(contents) = contents {
-            let results = if config.case {
-                search_case_sensitive(&config.query, &contents)
-            } else {
-                search_case_insensitive(&config.query, &contents)
-            };
-
-            if !results.is_empty() {
-                println!("\nIn file {}:", file_path.display());
                 for line in results {
-                    println!("{}", line);
+                    all_results.push(format!("{}", line));
                 }
             }
-        } else if config.verbose {
-            eprintln!("Failed to read file: {}", file_path.display());
+            Err(msg) => {
+                return Err(format!(
+                    "Failed to read file: {}\n{}",
+                    file_path.display(),
+                    msg
+                ));
+            }
         }
     }
 
-    Ok(())
+    Ok(all_results)
 }
 
 /// Serializes a string into a boolean
@@ -131,98 +130,8 @@ fn string_to_bool(string: String) -> bool {
     } else if string == "false" {
         is_bool = false;
     } else {
-        eprintln!("An error occurred during a string_to_bool operation");
+        eprintln!("{}", STR_TO_BOOL_ERR);
     }
 
     is_bool
-}
-
-#[cfg(test)]
-mod tests {
-    use super::{search_case_insensitive, search_case_sensitive, string_to_bool, Config};
-
-    #[test]
-    fn case_sensitive() {
-        let query = "duct";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.
-Duct tape.";
-
-        assert_eq!(
-            vec!["safe, fast, productive."],
-            search_case_sensitive(query, contents)
-        );
-    }
-
-    #[test]
-    fn case_insensitive() {
-        let query = "rUsT";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.
-Trust me.";
-
-        assert_eq!(
-            vec!["Rust:", "Trust me."],
-            search_case_insensitive(query, contents)
-        );
-    }
-
-    #[test]
-    fn whole_file() {
-        let query = "rUsT";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.
-Trust me.";
-
-        assert_eq!(
-            vec!["Rust:", "Trust me."],
-            search_case_insensitive(query, contents)
-        );
-    }
-
-    #[test]
-    fn str_bool() {
-        let tr = "true".to_string();
-        let fa = "false".to_string();
-
-        assert_eq!(string_to_bool(tr), true);
-        assert_eq!(string_to_bool(fa), false);
-        assert_eq!(string_to_bool("notABoolean".to_string()), false)
-    }
-
-    #[test]
-    fn conf() {
-        let query = String::from("q");
-        let filename = String::from("f");
-        let case = string_to_bool("true".to_string());
-        let verbose = string_to_bool("false".to_string());
-        let whole = string_to_bool("true".to_string());
-        let recurse = string_to_bool("false".to_string());
-
-        assert_eq!(
-            Config::new(&[
-                String::new(),
-                String::from("q"),
-                String::from("f"),
-                String::from("true"),
-                String::from("false"),
-                String::from("true"),
-                String::from("maybe")]
-            ),
-            Ok(Config {
-                query,
-                filename,
-                case,
-                verbose,
-                whole,
-                recurse,
-            })
-        )
-    }
 }

@@ -1,6 +1,7 @@
 # A little copy of grep
 
 ![Rust build](https://github.com/Raphdf201/minigrep/actions/workflows/rust.yml/badge.svg)
+![Code coverage](https://assets.raphdf201.net/rd/minigrepcodecov.svg)
 ![Crates.io Version](https://img.shields.io/crates/v/searcher_txt)
 ![docs.rs](https://img.shields.io/docsrs/searcher_txt)
 ![Crates.io Size](https://img.shields.io/crates/size/searcher_txt)
@@ -75,7 +76,7 @@ If you're on linux or macOS, replace the \ by /
 ## Code coverage
 ```
 cargo install cargo-llvm-cov
-cargo llvm-cov --open
+cargo cov
 ```
 
 

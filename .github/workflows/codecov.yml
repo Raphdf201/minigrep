@@ -1,0 +1,46 @@
+name: Coverage Badge
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install cargo-llvm-cov
+        run: cargo install cargo-llvm-cov
+
+      - name: Run coverage
+        run: |
+          cargo llvm-cov --lib --ignore-filename-regex='(main\.rs|tests\.rs)' \
+            --json --output-path lcov.json
+          COVERAGE=$(jq '.data[0].totals.lines.percent' lcov.json)
+          echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
+
+      - name: Generate badge
+        run: |
+          COVERAGE_INT=${COVERAGE%.*}
+          if [ "$COVERAGE_INT" -ge 90 ]; then
+            COLOR=brightgreen
+          elif [ "$COVERAGE_INT" -ge 75 ]; then
+            COLOR=yellow
+          else
+            COLOR=red
+          fi
+          curl -s "https://img.shields.io/badge/coverage-${COVERAGE}%25-${COLOR}.svg" \
+            -o coverage.svg
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Upload badge to server
+        run: |
+          scp -o StrictHostKeyChecking=no coverage.svg raphd@raw.raphdf201.net:/home/raphd/assets/minigrepcodecov.svg
+
+      - name: Run upload script
+        run: ssh raphd@raw.raphdf201.net "/home/raphd/uploadminigrepcodecovbadge"
