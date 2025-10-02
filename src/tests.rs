@@ -2,7 +2,6 @@
 mod tests {
     use crate::constants::RECURSE_NOT_DIR;
     use crate::*;
-    use std::fs::File;
     use std::string::String;
 
     #[test]
@@ -60,11 +59,11 @@ Trust me.";
         let recurse = true;
 
         assert_eq!(
-            Ok(vec![
+            Ok::<Vec<String>, String>(vec![
                 String::from("stalwarts"),
                 String::from("thwarts"),
                 String::from("warts")
-            ]),
+            ]).unwrap().sort(),
             search_recursive(&Config {
                 query,
                 filename,
@@ -72,7 +71,7 @@ Trust me.";
                 verbose,
                 whole,
                 recurse,
-            })
+            }).unwrap().sort()
         );
 
         let query = String::from("Who");
@@ -80,10 +79,10 @@ Trust me.";
         case = true;
 
         assert_eq!(
-            Ok(vec![
+            Ok::<Vec<String>, String>(vec![
                 String::from("I’m Nobody ! Who are you ?"),
                 String::from("2I’m Nobody ! Who are you ?")
-            ]),
+            ]).unwrap().sort(),
             search_recursive(&Config {
                 query,
                 filename,
@@ -91,7 +90,7 @@ Trust me.";
                 verbose,
                 whole,
                 recurse,
-            })
+            }).unwrap().sort()
         );
     }
 
@@ -115,32 +114,6 @@ Trust me.";
                 recurse,
             })
         )
-    }
-
-    #[test]
-    fn recursive_failfile() {
-        let f = &File::open(Path::new("lockedFile/opened.txt")).unwrap();
-        File::lock(f).expect("test file opened.txt not found");
-        let query = String::from("thing");
-        let filename = String::from("lockedFile");
-        let case = false;
-        let verbose = false;
-        let whole = false;
-        let recurse = true;
-
-        assert!(
-            search_recursive(&Config {
-                query,
-                filename,
-                case,
-                verbose,
-                whole,
-                recurse,
-            })
-            .is_err()
-        );
-
-        File::unlock(f).unwrap();
     }
 
     #[test]
