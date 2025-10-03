@@ -86,11 +86,12 @@ Available arguments :
 
 ## Testing
 
-`cargo test`
+```
+cargo test
+```
 
 ## Code coverage
 ```
-cargo install cargo-llvm-cov
 cargo cov
 ```
 
