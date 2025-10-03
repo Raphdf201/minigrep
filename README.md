@@ -11,9 +11,19 @@
 
 ## Installation
 
+### Using cargo
 ```
 cargo install searcher_txt
 ```
+
+### Downloading the latest release manually
+Get the latest release [build](https://github.com/Raphdf201/minigrep/releases/tag/1.2.9)
+Put it on your path
+
+### Downloading the latest dev build manually
+[windows](https://nightly.link/Raphdf201/minigrep/workflows/rust/master/windows.zip)
+[linux](https://nightly.link/Raphdf201/minigrep/workflows/rust/master/linux.zip)
+[macos](https://nightly.link/Raphdf201/minigrep/workflows/rust/master/macos.zip)
 
 ## Usage
 
