@@ -9,28 +9,33 @@
 ![Crates.io Total Downloads](https://img.shields.io/crates/d/searcher_txt)
 ![Crates.io Downloads (latest version)](https://img.shields.io/crates/dv/searcher_txt)
 
+## Installation
+
+```
+cargo install searcher_txt
+```
+
 ## Usage
 
-This is a cli program, which means you need to execute it using `.\searcher_txt.exe` on windows and `./searcher_txt` on
-linux and macOS
+This is a cli program, which means you need to execute it by typing `searcher_txt` in a terminal
 
 The arguments needed are the query and filename. You can also add optional arguments like case sensitivity or verbose
 output. Example for searching "potato" in file.txt with no case sensitivity on windows :
 
 ```
-.\searcher_txt potato file.txt
+searcher_txt potato file.txt
 ```
 
 If you want your search to be case-sensitive :
 
 ```
-.\searcher_txt potato file.txt --case
+searcher_txt potato file.txt --case
 ```
 
 If you want to search recursively, print the whole file, be case-sensitive and verbose, 
 
 ```
-.\searcher_txt potato folder/ -cvwr
+searcher_txt potato folder/ -cvwr
 ```
 
 Available arguments :
@@ -41,13 +46,11 @@ Available arguments :
 `--help/-h`
 `--version/-V`
 
-If you're on linux or macOS, replace the \ by /
-
-[Info](https://docs.raphdf201.net/minigrep/)
+[Docs](https://docs.raphdf201.net/minigrep/)
 
 ## Changelog
 
-1.2.8 : Refractor internal code and add more tests
+1.2.9 : Refractor internal code and add more tests
 
 1.2.8 : Add recursive argument
 
