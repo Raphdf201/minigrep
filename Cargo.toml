@@ -11,7 +11,7 @@ repository = "https://github.com/Raphdf201/minigrep"
 keywords = ["cli", "grep", "search"]
 
 [dependencies]
-clap = { version = "4.5.53", features = ["derive"] }
+clap = { version = "4.5.54", features = ["derive"] }
 walkdir = "2.5.0"
 
 [dev-dependencies]
