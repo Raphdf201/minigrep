@@ -15,4 +15,4 @@ clap = { version = "4.5.54", features = ["derive"] }
 walkdir = "2.5.0"
 
 [dev-dependencies]
-cargo-llvm-cov = "0.6.22"
+cargo-llvm-cov = "0.6.23"
