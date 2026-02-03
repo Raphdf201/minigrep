@@ -110,9 +110,9 @@ dependencies = [
 
 [[package]]
 name = "cargo-llvm-cov"
-version = "0.8.1"
+version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "be0b930db736a19ee49155d625754b1cda0c6e0ffccad084080fc6b583240116"
+checksum = "f8132c5e1b6489a345e12bbc3deb7154cb8d8b51bd9d9b168505eff5e5ce88ee"
 dependencies = [
  "anyhow",
  "camino",
