@@ -1,6 +1,5 @@
 #[cfg(test)]
 mod tests {
-    use crate::constants::RECURSE_NOT_DIR;
     use crate::*;
     use std::string::String;
 
@@ -52,7 +51,7 @@ Trust me.";
     #[test]
     fn recursive_normal() {
         let query = String::from("warts");
-        let filename = String::from("testFiles");
+        let path = String::from("testFiles");
         let mut case = false;
         let verbose = false;
         let whole = false;
@@ -66,7 +65,7 @@ Trust me.";
             ]).unwrap().sort(),
             search_recursive(&Config {
                 query,
-                filename,
+                path,
                 case,
                 verbose,
                 whole,
@@ -75,7 +74,7 @@ Trust me.";
         );
 
         let query = String::from("Who");
-        let filename = String::from("testFiles");
+        let path = String::from("testFiles");
         case = true;
 
         assert_eq!(
@@ -85,7 +84,7 @@ Trust me.";
             ]).unwrap().sort(),
             search_recursive(&Config {
                 query,
-                filename,
+                path,
                 case,
                 verbose,
                 whole,
@@ -97,7 +96,7 @@ Trust me.";
     #[test]
     fn recursive_notdir() {
         let query = String::from("thing");
-        let filename = String::from("testFiles/file.txt");
+        let path = String::from("testFiles/file.txt");
         let case = false;
         let verbose = false;
         let whole = false;
@@ -107,7 +106,7 @@ Trust me.";
             Err(RECURSE_NOT_DIR.to_string()),
             search_recursive(&Config {
                 query,
-                filename,
+                path,
                 case,
                 verbose,
                 whole,
@@ -129,7 +128,7 @@ Trust me.";
     #[test]
     fn conf_create() {
         let query = String::from("q");
-        let filename = String::from("f");
+        let path = String::from("f");
         let case = string_to_bool("true".to_string());
         let verbose = string_to_bool("false".to_string());
         let whole = string_to_bool("true".to_string());
@@ -138,7 +137,7 @@ Trust me.";
         assert_eq!(
             Ok(Config {
                 query,
-                filename,
+                path,
                 case,
                 verbose,
                 whole,

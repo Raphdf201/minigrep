@@ -1,4 +1,3 @@
-mod constants;
 mod tests;
 
 use std::fs;
@@ -6,8 +5,9 @@ use std::path::Path;
 
 use clap::Parser;
 
-use crate::constants::*;
 use walkdir::WalkDir;
+
+pub const RECURSE_NOT_DIR: &str = "--recurse flag set but path is not a directory";
 
 /// Parameters (arguments) of the cli program
 #[derive(Parser, Debug, PartialEq)]
@@ -16,7 +16,7 @@ pub struct Config {
     /// The string to search
     pub query: String,
     /// The file to search in
-    pub filename: String,
+    pub path: String,
     /// Case sensitivity (optional)
     #[arg(short, long)]
     pub case: bool,
@@ -35,7 +35,7 @@ pub struct Config {
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &str> {
         let query = args[1].clone();
-        let filename = args[2].clone();
+        let path = args[2].clone();
         let case = string_to_bool(args[3].clone());
         let verbose = string_to_bool(args[4].clone());
         let whole = string_to_bool(args[5].clone());
@@ -43,7 +43,7 @@ impl Config {
 
         Ok(Config {
             query,
-            filename,
+            path,
             case,
             verbose,
             whole,
@@ -84,14 +84,14 @@ pub fn search_case_insensitive(query: &str, contents: &str) -> Result<Vec<String
 /// Recursive search
 /// Returns all the lines of all the files and folders mentioned in the config where the query is present
 pub fn search_recursive(config: &Config) -> Result<Vec<String>, String> {
-    let path = Path::new(&config.filename);
+    let path = Path::new(&config.path);
     if !path.is_dir() {
         return Err(String::from(RECURSE_NOT_DIR));
     }
 
     let mut all_results = Vec::new();
 
-    for entry in WalkDir::new(&config.filename)
+    for entry in WalkDir::new(&config.path)
         .into_iter()
         .filter_map(Result::ok)
         .filter(|e| e.file_type().is_file())
@@ -106,7 +106,7 @@ pub fn search_recursive(config: &Config) -> Result<Vec<String>, String> {
                 };
 
                 for line in results {
-                    all_results.push(format!("{}", line));
+                    all_results.push(line.to_string());
                 }
             }
             Err(msg) => {
@@ -134,7 +134,7 @@ fn string_to_bool(string: String) -> bool {
     } else if str == "false" {
         is_bool = false;
     } else {
-        eprintln!("{}", STR_TO_BOOL_ERR);
+        eprintln!("An error occurred during a string_to_bool operation");
     }
 
     is_bool

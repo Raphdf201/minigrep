@@ -10,7 +10,7 @@ fn main() {
     let config = Config::parse();
 
     print!("Searching for \"{}\"", config.query);
-    println!(" in \"{}\"", config.filename);
+    println!(" in \"{}\"", config.path);
 
     if let Err(e) = run(config) {
         eprintln!("Application error: {}", e);
@@ -27,10 +27,10 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
         results = search_recursive(&config);
     } else {
         if config.verbose {
-            println!("Parsing file {}", config.filename);
+            println!("Parsing file {}", config.path);
         }
 
-        let contents = fs::read_to_string(&config.filename)?;
+        let contents = fs::read_to_string(&config.path)?;
 
         if config.whole {
             println!("Contents of search :\n{}\n", contents);
