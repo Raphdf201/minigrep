@@ -99,6 +99,9 @@ pub fn search_recursive(config: &Config) -> Result<Vec<String>, String> {
         let file_path = entry.path();
         match fs::read_to_string(file_path) {
             Ok(contents) => {
+                if config.whole {
+                    println!("Contents of search :\n{}\n", contents);
+                }
                 let results = if config.case {
                     search_case_sensitive(&config.query, &contents)?
                 } else {

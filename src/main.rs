@@ -10,7 +10,16 @@ fn main() {
     let config = Config::parse();
 
     print!("Searching for \"{}\"", config.query);
-    println!(" in \"{}\"", config.path);
+    print!(" in \"{}\" ", config.path);
+    if config.verbose {
+        println!("with arguments");
+        println!("query : {}", config.query);
+        println!("path : {}", config.path);
+        println!("verbose : true");
+        println!("recurse : {}", config.recurse);
+        println!("case sensitive : {}", config.case);
+        println!("whole : {}", config.whole);
+    } else { println!("\n"); }
 
     if let Err(e) = run(config) {
         eprintln!("Application error: {}", e);
