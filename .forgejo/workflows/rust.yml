@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: git.raphdf201.net/raphdf201/rust-node-image:latest
+      image: git.raphdf201.net/raphdf201/images:rust-node
     steps:
       - uses: actions/checkout@v4
       - name: Build release
