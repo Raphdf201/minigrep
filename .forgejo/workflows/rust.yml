@@ -4,7 +4,7 @@ on: push
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: fedora-bare:host
     steps:
       - uses: actions/checkout@v4
       - name: Build release
