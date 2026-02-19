@@ -4,7 +4,9 @@ on: push
 
 jobs:
   build:
-    runs-on: fedora-bare:host
+    runs-on: ubuntu-latest
+    container:
+      image: git.raphdf201.net/raphdf201/rust-node-image:latest
     steps:
       - uses: actions/checkout@v4
       - name: Build release
