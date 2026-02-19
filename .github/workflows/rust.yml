@@ -17,7 +17,7 @@ jobs:
       - name: Run tests
         run: cargo test --verbose
       - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: linux
           path: ./target/release/searcher_txt
@@ -32,7 +32,7 @@ jobs:
       - name: Run tests
         run: cargo test --verbose
       - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: windows
           path: .\target\release\searcher_txt.exe
@@ -47,7 +47,7 @@ jobs:
       - name: Run tests
         run: cargo test --verbose
       - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: macos
           path: ./target/release/searcher_txt
