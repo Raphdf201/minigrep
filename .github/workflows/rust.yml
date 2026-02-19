@@ -11,7 +11,7 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build release
         run: cargo build --release --verbose
       - name: Run tests
@@ -26,7 +26,7 @@ jobs:
   build-win:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build release
         run: cargo build --release --verbose
       - name: Run tests
@@ -41,7 +41,7 @@ jobs:
   build-mac:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build release
         run: cargo build --release --verbose
       - name: Run tests
